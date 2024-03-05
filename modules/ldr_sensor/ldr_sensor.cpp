@@ -36,3 +36,4 @@ float ldrSensorRead()
 }
 
 //=====[Implementations of private functions]==================================
+//comment
