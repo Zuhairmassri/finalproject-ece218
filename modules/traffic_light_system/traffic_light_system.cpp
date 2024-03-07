@@ -1,10 +1,20 @@
 //=====[Libraries]=============================================================
 
+#include "mbed.h"
 #include "arm_book_lib.h"
 
 #include "traffic_light_system.h"
+#include "traffic_lights.h"
+#include "timer.h"
 
 //=====[Declaration of private defines]========================================
+
+// Declare and initialize TrafficLights objects within the trafficLightSystemInit function
+
+TrafficLights TL1(D0, D1, D2);
+TrafficLights TL2(D3, D4, D5);
+TrafficLights TL3(D6, D7, D8);
+TrafficLights TL4(D9, D10, D11);
 
 //=====[Declaration of private data types]=====================================
 
@@ -29,5 +39,27 @@ void trafficLightSystemUpdate()
 {
 
 }
+
+void mainRoadGreen(){
+    TL1.green();
+    TL2.green();
+}
+
+void sideRoadGreen(){
+    TL3.green();
+    TL4.green();
+}
+
+void mainRoadRed(){
+    TL1.red();
+    TL2.red();
+}
+
+void sideRoadRed(){
+    TL3.red();
+    TL4.red();
+}
+
+
 
 //=====[Implementations of private functions]==================================
