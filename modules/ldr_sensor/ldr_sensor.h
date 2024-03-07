@@ -8,10 +8,13 @@
 //=====[Declaration of public data types]======================================
 
 //=====[Declarations (prototypes) of public functions]=========================
-
-void ldrSensorInit();
-void ldrSensorUpdate();
-float ldrSensorRead();
+class LDR_Sensor {
+public:
+    void ldrSensorInit();
+    void ldrSensorUpdate();
+    float ldrSensorRead();
+}
+    
 
 //=====[#include guards - end]=================================================
 

@@ -32,18 +32,6 @@ void Timer start(long duration) {
     running = true;
 }
 
-bool Timer hasExpired() {
-    if (!running) {
-        return false; // Timer is not running.
-    }
-    auto now = Kernel::Clock::now().time_since_epoch().count();
-    if ((now - startTime) >= duration) {
-        running = false; // Automatically stop the timer
-        return true; // Timer has expired
-    }
-    return false; // Timer is still running
-}
-
 void Timer reset() {
     running = false; // Stop the timer
     startTime = 0; // Reset start time

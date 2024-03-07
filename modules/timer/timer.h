@@ -11,7 +11,6 @@ public:
     Timer(); // Constructor
     void timerInit(); // Initializes the timer without setting a duration
     void start(long duration); // Starts the timer with a specified duration in milliseconds
-    bool hasExpired(); // Checks if the timer has exceeded its duration
     void reset(); // Resets the timer to its initial state
 
 
