@@ -40,26 +40,26 @@ void trafficLightSystemUpdate()
 
 }
 
-void mainRoadGreen(){
+
+//=====[Implementations of private functions]==================================
+
+
+static void mainRoadGreen(){
     TL1.green();
     TL2.green();
 }
 
-void sideRoadGreen(){
+static void sideRoadGreen(){
     TL3.green();
     TL4.green();
 }
 
-void mainRoadRed(){
+static void mainRoadRed(){
     TL1.red();
     TL2.red();
 }
 
-void sideRoadRed(){
+static void sideRoadRed(){
     TL3.red();
     TL4.red();
 }
-
-
-
-//=====[Implementations of private functions]==================================
