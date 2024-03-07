@@ -63,3 +63,13 @@ static void sideRoadRed(){
     TL3.red();
     TL4.red();
 }
+
+static void mainRoadYellow(){
+    TL1.yellow();
+    TL2.yellow();
+}
+
+static void sideRoadYellow(){
+    TL3.yellow();
+    TL4.yellow();
+}
