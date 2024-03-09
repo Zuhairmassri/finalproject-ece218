@@ -15,11 +15,14 @@ A list of the code modules and a bried description of which each module does:
 
 -Timer Module
     
-    -
+    -The timer module controls the duration of each traffic light phase. This involves determining how long the light remains
+    green to let cars on the side road go before switching back to red. 
 
 -Traffic Flow Logic Module
    
-    -
+    -The traffic flow logic module acts as the brain of the system, and analyzes data from both the timer module and sensor input
+    module to make decisions for when and how traffic signals should change. 
+
 
 If the code is a) written from scratch, b) based on textbook code or c) based on code found online:
 
