@@ -1,22 +1,24 @@
 //=====[#include guards - begin]===============================================
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef TIMERS_H
+#define TIMERS_H
 
 //=====[Declaration of public defines]=========================================
 
 //=====[Declaration of public data types]======================================
-class Timer {
+class Timers {
 public:
-    Timer(); // Constructor
+    Timers(); // Constructor
     void timerInit(); // Initializes the timer without setting a duration
     void start(long duration); // Starts the timer with a specified duration in milliseconds
+    bool hasExpired(); // Checks if the timer has exceeded its duration
     void reset(); // Resets the timer to its initial state
+    bool isRunning();
 
 
 private:
-    Timer(const Timer&); // Prevent copying
-    Timer& operator=(const Timer&); // Prevent assignment
+    Timers(const Timers&); // Prevent copying
+    Timers& operator=(const Timers&); // Prevent assignment
 
     long startTime; // Start time of the timer
     long duration; // Duration of the timer
@@ -26,4 +28,4 @@ private:
 
 //=====[#include guards - end]=================================================
 
-#endif // TIMER_H
+#endif // TIMERS_H
