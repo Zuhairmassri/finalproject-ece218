@@ -21,13 +21,21 @@ If the code is a) written from scratch, b) based on textbook code or c) based on
 
 
 A list of the hardware components connected to the Nucleo board, and the pins for each component:
+    
     -4x Red LED
+        
         -D2, D5, D8, D11
+   
     -4x Yellow LED
+        
         -D1, D4, D7, D10
+    
     -4x Green LED
+       
         -D0, D3, D6, D9
+    
     -2x LDR Sensors
+        
         -A0, A1
 
 A description of the tests you performed on the system, and the results:
