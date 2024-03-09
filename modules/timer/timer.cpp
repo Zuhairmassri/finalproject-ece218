@@ -19,20 +19,36 @@
 //=====[Declarations (prototypes) of private functions]========================
 
 //=====[Implementations of public functions]===================================
-Timer Timer() : startTime(0), duration(0), running(false) {}
+Timers::Timers() : startTime(0), duration(0), running(false) {}
 
-void Timer timerInit() {
+void Timers::timerInit() {
     // Timer is initialized but not started.
     running = false;
 }
 
-void Timer start(long duration) {
+void Timers::start(long duration) {
     this->duration = duration;
     startTime = Kernel::Clock::now().time_since_epoch().count();
     running = true;
 }
 
-void Timer reset() {
+bool Timers::hasExpired() {
+    if (!running) {
+        return false; // Timer is not running.
+    }
+    auto now = Kernel::Clock::now().time_since_epoch().count();
+    if ((now - startTime) >= duration) {
+        running = false; // Automatically stop the timer
+        return true; // Timer has expired
+    }
+    return false; // Timer is still running
+}
+
+bool Timers::isRunning(){
+    return running;
+}
+
+void Timers::reset() {
     running = false; // Stop the timer
     startTime = 0; // Reset start time
     duration = 0; // Reset duration
