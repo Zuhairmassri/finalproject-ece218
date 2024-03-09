@@ -13,6 +13,14 @@
 void trafficLightSystemInit();
 void trafficLightSystemUpdate();
 
+static void mainRoadYellow();
+static void sideRoadYellow();
+static void mainRoadGreen();
+static void sideRoadGreen();
+static void mainRoadRed();
+static void sideRoadRed();
+static bool isSideVehicleDetected();
+
 //=====[#include guards - end]=================================================
 
 #endif // _TRAFFIC_LIGHT_SYSTEM_H_
