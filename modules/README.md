@@ -9,12 +9,16 @@ A summary of the behavior of this code in your system:
 A list of the code modules and a bried description of which each module does:
 
 -Sensor Input Module
-    -
+
+    -The sensor input module is in charge of detecting the presence of a vehicle. Once the presence of a vehicle is detected, 
+    a signal is sent to the traffic flow logic module, letting it know that a light state must change. 
 
 -Timer Module
+    
     -
 
 -Traffic Flow Logic Module
+   
     -
 
 If the code is a) written from scratch, b) based on textbook code or c) based on code found online:
