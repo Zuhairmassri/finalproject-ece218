@@ -29,6 +29,8 @@ A list of the code modules and a bried description of which each module does:
 
 If the code is a) written from scratch, b) based on textbook code or c) based on code found online:
 
+The code for the timer module is based on the timer content we learned in chapter 8 of the textbook. 
+
 
 A list of the hardware components connected to the Nucleo board, and the pins for each component:
     
