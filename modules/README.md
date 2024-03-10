@@ -4,6 +4,7 @@ Spencer Aldrich and Zuhair AlMassri - Automated Traffic Light system
 
 
 A summary of the behavior of this code in your system:
+
 The system is designed to manage traffic at an intersection between a main road and a side road, 
 using traffic signals (LEDs) controlled by a microcontroller, with input from Light Dependent Resistor 
 (LDR) sensors to detect vehicle presence and adjust signal timing accordingly.
