@@ -1,57 +1,47 @@
-//=====[Libraries]=============================================================
-
-#include "mbed.h"
-
 #include "timer.h"
 
-//=====[Declaration of private defines]========================================
-
-//=====[Declaration of private data types]=====================================
-
-//=====[Declaration and initialization of public global objects]===============
-
-//=====[Declaration of external public global variables]=======================
-
-//=====[Declaration and initialization of public global variables]=============
-
-//=====[Declaration and initialization of private global variables]============
-
-//=====[Declarations (prototypes) of private functions]========================
-
-//=====[Implementations of public functions]===================================
-Timers::Timers() : startTime(0), duration(0), running(false) {}
-
-void Timers::timerInit() {
-    // Timer is initialized but not started.
-    running = false;
+Timers::Timers() : duration(0), running(false) {
+    mbed::RealTimeClock::init(); 
 }
 
-void Timers::start(long duration) {
-    this->duration = duration;
-    startTime = Kernel::Clock::now().time_since_epoch().count();
+Timers::~Timers() {
+    mbed::RealTimeClock::free(); 
+}
+
+void Timers::timerInit() {
+    running = false;
+    startTime = mbed::RealTimeClock::time_point(std::chrono::seconds(0));
+    duration = std::chrono::seconds(0);
+}
+
+void Timers::start(long seconds) {
+    this->duration = std::chrono::seconds(seconds);
+    this->startTime = mbed::RealTimeClock::now();
     running = true;
 }
 
-bool Timers::hasExpired() {
+enum TimerStatus {
+    TIMER_NOT_RUNNING = -1,
+    TIMER_RUNNING = 0,
+    TIMER_EXPIRED = 1
+};
+
+int Timers::hasExpired() {
     if (!running) {
-        return false; // Timer is not running.
+        return TIMER_NOT_RUNNING;
     }
-    auto now = Kernel::Clock::now().time_since_epoch().count();
-    if ((now - startTime) >= duration) {
-        running = false; // Automatically stop the timer
-        return true; // Timer has expired
+    auto now = mbed::RealTimeClock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - startTime);
+    if (elapsed >= duration) {
+        running = false;
+        return TIMER_EXPIRED;
     }
-    return false; // Timer is still running
+    return TIMER_RUNNING;
 }
 
-bool Timers::isRunning(){
-    return running;
-}
 
 void Timers::reset() {
-    running = false; // Stop the timer
-    startTime = 0; // Reset start time
-    duration = 0; // Reset duration
+    running = false;
+    startTime = mbed::RealTimeClock::time_point(std::chrono::seconds(0));
+    duration = std::chrono::seconds(0);
 }
-//=====[Implementations of private functions]==================================
-//comment
