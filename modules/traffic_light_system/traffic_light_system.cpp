@@ -50,66 +50,123 @@ TrafficLights TL2(D3, D4, D5);
 TrafficLights TL3(D6, D7, D8);
 TrafficLights TL4(D9, D10, D11);
 
-// Timer object for managing traffic light phases
 Timers timer;
 Timers yellowTimer;
             
 
-// Analog input for LDR sensors on the side road
-AnalogIn ldrSideRoad1(A0); // LDR sensor for one direction
-AnalogIn ldrSideRoad2(A1); // LDR sensor for the opposite direction
+AnalogIn ldrSideRoad1(A0);
+AnalogIn ldrSideRoad2(A1); 
 
-// Duration constants for traffic light phases (in milliseconds)
-const long SIDE_ROAD_GREEN_DURATION = 30000; // 30 seconds
-const long YELLOW_DURATION = 5000; // 5 seconds
+const long SIDE_ROAD_GREEN_DURATION = 30; 
+const long YELLOW_DURATION = 5;
 
-// Flag to track if a vehicle has been detected on the side road
 bool vehicleDetectedSideRoad = false;
+bool isSideRoadYellow = false;
+bool isMainRoadYellow = false;
+bool isSideRoadGreen = false;
+bool isMainRoadGreen = false;
+bool isSideRoadRed = false;
+bool isMainRoadRed = false;
 
-// Initialize traffic light system
+int TIMER_EXPIRED = 1;
+
 void trafficLightSystemInit() {
-    // Initialize timer
+
     timer.timerInit();
     yellowTimer.timerInit();
-
-    // Initialize LDR sensors
     ldrSensorInit();
+    mainRoadGreen();
+    sideRoadRed();
 }
 
-// Update traffic light system
+enum TrafficLightState {
+    MAIN_ROAD_GREEN,
+    MAIN_ROAD_YELLOW,
+    MAIN_ROAD_RED,
+    SIDE_ROAD_GREEN,
+    SIDE_ROAD_YELLOW,
+};
+
+TrafficLightState currentState = MAIN_ROAD_GREEN;
+
+
 void trafficLightSystemUpdate() {
-    if (timer.hasExpired()) {
-        if (isSideVehicleDetected()) {
-            // Transition main road green light to yellow then red
-            mainRoadYellow();
-            if(!yellowTimer.isRunning()){
-                yellowTimer.start(YELLOW_DURATION);
-            } else if(yellowTimer.hasExpired()){
-                mainRoadRed();
-            }
-            sideRoadGreen();
+    int yellowExpired = yellowTimer.hasExpired();
+    int timerExpired = timer.hasExpired();
 
-            // Start timer for side road green phase
-            timer.start(SIDE_ROAD_GREEN_DURATION);
-            
-        } else {
-            // Transition main road green light to yellow then red
-            sideRoadYellow();
-            if(!yellowTimer.isRunning()){
+    switch (currentState) {
+        case MAIN_ROAD_GREEN:
+            if (isSideVehicleDetected()) {
+                mainRoadYellow();
                 yellowTimer.start(YELLOW_DURATION);
-            } else if(yellowTimer.hasExpired()){
-                sideRoadRed();
+                currentState = MAIN_ROAD_YELLOW;
             }
-            mainRoadGreen();
-                }
+            break;
+
+        case MAIN_ROAD_YELLOW:
+            if (yellowExpired == TIMER_EXPIRED) {
+                mainRoadRed();
+                currentState = MAIN_ROAD_RED;
+            }
+            break;
+
+        case MAIN_ROAD_RED:
+            sideRoadGreen();
+            timer.start(SIDE_ROAD_GREEN_DURATION); 
+            currentState = SIDE_ROAD_GREEN;
+            break;
+
+        case SIDE_ROAD_GREEN:
+
+            if (timerExpired == TIMER_EXPIRED) {
+                sideRoadYellow();
+                yellowTimer.start(YELLOW_DURATION); 
+                currentState = SIDE_ROAD_YELLOW;
+            }
+            break;
+
+        case SIDE_ROAD_YELLOW:
+            if (yellowExpired == TIMER_EXPIRED) {
+                sideRoadRed();
+                mainRoadGreen();
+                currentState = MAIN_ROAD_GREEN; 
+            }
+            break;
     }
-    
 }
+
+
+static void updateMainLightStatus() {
+    if (isMainRoadRed) {
+        isMainRoadGreen = false;
+        isMainRoadYellow = false;
+    } else if (isMainRoadYellow) {
+        isMainRoadGreen = false;
+        isMainRoadRed = false;
+    } else if (isMainRoadGreen) {
+        isMainRoadYellow = false;
+        isMainRoadRed = false;
+    }
+}
+
+static void updateSideLightStatus() {
+    if (isSideRoadRed) {
+        isSideRoadGreen = false;
+        isSideRoadYellow = false;
+    } else if (isSideRoadYellow) {
+        isSideRoadGreen = false;
+        isSideRoadRed = false;
+    } else if (isSideRoadGreen) {
+        isSideRoadYellow = false;
+        isSideRoadRed = false;
+    }
+}
+
 
 static bool isSideVehicleDetected(){
     float ldrValue1 = ldrSideRoad1.read();
     float ldrValue2 = ldrSideRoad2.read();
-    if (ldrValue1 < 0.5 || ldrValue2 < 0.5) {
+    if (ldrValue1 < 0.2 || ldrValue2 < 0.2) {
         return true;
     }
     return false;
