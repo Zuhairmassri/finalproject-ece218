@@ -20,6 +20,8 @@ static void sideRoadGreen();
 static void mainRoadRed();
 static void sideRoadRed();
 static bool isSideVehicleDetected();
+static void updateMainLightStatus();
+static void updateSideLightStatus();
 
 //=====[#include guards - end]=================================================
 
