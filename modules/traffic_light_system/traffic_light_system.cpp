@@ -8,6 +8,7 @@
 #include "timer.h"
 #include "ldr_sensor.h"
 
+
 class TrafficLights {
 private:
     DigitalOut RedLed;
@@ -44,7 +45,6 @@ public:
 //=====[Declaration of private defines]========================================
 
 
-// Define TrafficLights objects for each intersection
 TrafficLights TL1(D0, D1, D2);
 TrafficLights TL2(D3, D4, D5);
 TrafficLights TL3(D6, D7, D8);
@@ -70,14 +70,14 @@ bool isMainRoadRed = false;
 
 int TIMER_EXPIRED = 1;
 
-void trafficLightSystemInit() {
 
-    timer.timerInit();
-    yellowTimer.timerInit();
-    ldrSensorInit();
-    mainRoadGreen();
-    sideRoadRed();
-}
+const int TIME_INCREMENT_MS = 100; 
+
+const int MAIN_ROAD_GREEN_DURATION_MS = 5000; // Example: 5 seconds
+const int YELLOW_DURATION_MS = 2000;          // Example: 2 seconds
+const int SIDE_ROAD_GREEN_DURATION_MS = 5000; // Example: 5 seconds
+
+int accumulatedTimeMS = 0;
 
 enum TrafficLightState {
     MAIN_ROAD_GREEN,
@@ -90,46 +90,61 @@ enum TrafficLightState {
 TrafficLightState currentState = MAIN_ROAD_GREEN;
 
 
+
+void trafficLightSystemInit() {
+
+    timer.timerInit();
+    yellowTimer.timerInit();
+    ldrSensorInit();
+    mainRoadGreen();
+    sideRoadRed();
+    accumulatedTimeMS = 0;
+    currentState = MAIN_ROAD_GREEN; 
+}
+
+
 void trafficLightSystemUpdate() {
-    int yellowExpired = yellowTimer.hasExpired();
-    int timerExpired = timer.hasExpired();
+    accumulatedTimeMS += TIME_INCREMENT_MS;
 
     switch (currentState) {
         case MAIN_ROAD_GREEN:
-            if (isSideVehicleDetected()) {
+            if (accumulatedTimeMS >= MAIN_ROAD_GREEN_DURATION_MS) {
                 mainRoadYellow();
-                yellowTimer.start(YELLOW_DURATION);
+                accumulatedTimeMS = 0;
                 currentState = MAIN_ROAD_YELLOW;
             }
             break;
 
         case MAIN_ROAD_YELLOW:
-            if (yellowExpired == TIMER_EXPIRED) {
+            if (accumulatedTimeMS >= YELLOW_DURATION_MS) {
                 mainRoadRed();
+                accumulatedTimeMS = 0; 
                 currentState = MAIN_ROAD_RED;
             }
             break;
 
         case MAIN_ROAD_RED:
-            sideRoadGreen();
-            timer.start(SIDE_ROAD_GREEN_DURATION); 
-            currentState = SIDE_ROAD_GREEN;
+            if (accumulatedTimeMS >= SIDE_ROAD_GREEN_DURATION_MS) {
+                sideRoadGreen();
+                accumulatedTimeMS = 0;
+                currentState = SIDE_ROAD_GREEN;
+            }
             break;
 
         case SIDE_ROAD_GREEN:
-
-            if (timerExpired == TIMER_EXPIRED) {
+            if (accumulatedTimeMS >= SIDE_ROAD_GREEN_DURATION_MS) {
                 sideRoadYellow();
-                yellowTimer.start(YELLOW_DURATION); 
+                accumulatedTimeMS = 0;
                 currentState = SIDE_ROAD_YELLOW;
             }
             break;
 
         case SIDE_ROAD_YELLOW:
-            if (yellowExpired == TIMER_EXPIRED) {
+            if (accumulatedTimeMS >= YELLOW_DURATION_MS) {
                 sideRoadRed();
                 mainRoadGreen();
-                currentState = MAIN_ROAD_GREEN; 
+                accumulatedTimeMS = 0;
+                currentState = MAIN_ROAD_GREEN;
             }
             break;
     }
