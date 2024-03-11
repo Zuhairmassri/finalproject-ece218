@@ -8,5 +8,6 @@ int main() {
     trafficLightSystemInit();
     while(true){
         trafficLightSystemUpdate();
+        delay(100);
     }
 }
