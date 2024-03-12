@@ -42,6 +42,8 @@ The system was rigorously tested under various scenarios to ensure its reliabili
 
 The system is designed with flexibility and scalability in mind, allowing for future enhancements such as integrating more sophisticated vehicle detection methods or expanding to manage multiple intersections.
 
+The system could also possibly be enhance to account for pedestrian crossing the streets in order to simulate a more real daily implementation of a traffic lights system. This implementation could possibly allow for the integration of an LED Display and sound system that instructs the pedestrians on crossing the streets.
+
 ## Conclusion
 
 This Automated Traffic Light Control System presents a robust solution for managing traffic at intersections. Through careful testing and innovative solutions like the software-based timer, it demonstrates a high degree of reliability and efficiency in optimizing traffic flow.
