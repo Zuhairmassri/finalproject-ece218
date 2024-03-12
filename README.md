@@ -26,13 +26,33 @@ The code structure is divided into several key components, each responsible for 
 
 Represents a single set of traffic lights, encapsulating control over the red, yellow, and green LEDs. It ensures only the appropriate light is active at any given time.
 
+#### Key Features
+- **Initialization:** Requires pin names for the red, yellow, and green LEDs during instantiation. Initializes all LEDs to the OFF state.
+- **Control Methods:** Provides methods `green()`, `yellow()`, and `red()` to turn on the respective light while ensuring the other two are turned off, simulating the behavior of a physical traffic light.
+
 ### Timers Class
 
-Abstraction over a software-based timer mechanism. It accumulates delays from the main loop and checks against defined thresholds to manage state transitions.
+Provides a software-based timer mechanism by accumulating delays. It's crucial for managing state transition durations within the traffic light control system.
 
-### trafficLightSystemUpdate Function
+#### Key Features
+- **Reset Timer:** Resets the accumulated time to zero.
+- **Update Timer:** Increments the accumulated time by the elapsed time since the last update.
+- **Check Expiration:** Determines if the accumulated time has reached or exceeded the specified duration, indicating the timer has expired.
 
-Implements the traffic light control logic as a state machine, managing transitions based on vehicle detection and timer expirations.
+#### Traffic Light System Update Function
+
+The `trafficLightSystemUpdate` function is the core of the traffic light control logic, implementing a state machine to manage the transitions between different states of the traffic lights based on vehicle detection and timer expirations.
+
+**Key Features:**
+- **State Machine:** Manages states such as `MAIN_ROAD_GREEN`, `MAIN_ROAD_YELLOW`, `MAIN_ROAD_RED`, `SIDE_ROAD_GREEN`, and `SIDE_ROAD_YELLOW`. Transitions between these states control the traffic flow.
+- **Vehicle Detection:** Checks for vehicle presence on the side road to initiate a change from the main road being green to yellow, then red, allowing the side road to turn green.
+- **Timer Management:** Utilizes the `Timers` class to wait for specific durations before transitioning between states, ensuring that lights remain in each state for an appropriate amount of time.
+
+#### Additional Details
+
+- **Flexibility and Modularity:** The design separates concerns into distinct classes (`TrafficLights` and `Timers`), allowing for easy modifications, such as changing timing durations or adding more traffic lights.
+- **Scalability:** The system can be scaled to manage multiple intersections by instantiating more `TrafficLights` objects and managing them within an expanded state machine logic.
+- **Debugging and Maintenance:** The clear separation of functionality and the use of descriptive state names aid in debugging and future maintenance of the system.
 
 ## Testing and Validation
 
