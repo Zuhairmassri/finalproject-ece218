@@ -1,25 +1,16 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "mbed.h"
-#include "RealTimeClock.h"
-#include <chrono>
-
 class Timers {
 public:
     Timers();
-    ~Timers();
 
-    void timerInit();
-    void start(long seconds);
-    int hasExpired();
-    bool isRunning();
     void reset();
+    void update(int elapsedTimeMS);
+    bool hasExpired(int durationMS);
 
 private:
-    mbed::RealTimeClock::time_point startTime;
-    std::chrono::seconds duration;
-    bool running;
+    int accumulatedTimeMS;
 };
 
 #endif // TIMER_H
